@@ -9,14 +9,15 @@ const postSchema = mongoose.Schema({
     selectedFile: String,
     likes: {
         type: [String],
-        default: [],
+        default: []
     },
+    comments: {type: [String], default: []},
     createdAt: {
         type: Date,
         default: new Date(),
-    },
-});
-
+     },
+     })
+     
 const PostMessage = mongoose.model('PostMessage', postSchema);
 
 export default PostMessage;

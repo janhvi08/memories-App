@@ -1,15 +1,15 @@
 import React, {useState} from 'react';
-import {Avatar, Button, Paper, Grid, Typography, Container, responsiveFontSizes} from '@material-ui/core';
+import {Avatar, Button, Paper, Grid, Typography, Container} from '@material-ui/core';
 import {GoogleLogin} from 'react-google-login';
 import {useDispatch} from 'react-redux'; 
 import {useNavigate} from 'react-router-dom';
+import { AUTH } from '../../constants/actionTypes';
 
 import Icon from './Icon';
 import LockOutlinedIcon from '@material-ui/icons/LockOpenOutlined'
 import useStyles from './styles';
 import Input from './Input';
 import {signin, signup} from '../../actions/auth';
-import {AUTH} from '../../constants/actionTypes'
 
 const initialState = {firstName: '', lastName: '', email: '', password: '', confirmPassword: '' }
 
@@ -21,7 +21,7 @@ const SignUp = () => {
     const classes = useStyles();
 
     const [showPassword, setShowPassword] = useState(false);
-    const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword)
+    const handleShowPassword = () => setShowPassword(!showPassword);
 
     const switchMode = () => {
         setForm(initialState);
@@ -40,38 +40,37 @@ const SignUp = () => {
         }
     };
 
-    const googleSuccess = async (res) => {
+    const googleSuccess = (res) => {
         const result = res?.profileObj;
         const token = res?.tokenId;
 
         try {
-           dispatch({type: 'AUTH', data: {result, token}});
+           dispatch({type: AUTH, data: {result, token}});
            
-           history.push('/')
+           history('/');
         } catch (error) {
             console.log(error);
         }
     };
 
-    const googleError = () => {
+    const googleError = () =>{
         console.log("Google Sign In was unsuccessful. Try Again Later");
-    };
+    }
 
-    const handleChange = (e) => {
+    const handleChange = (e) =>{
         setForm({ ...form, [e.target.name]: e.target.value});
     }
 
   return (
     <Container component="main" maxWidth="xs">
-        <Paper className={classes.paper} elevation={3}>
+        <Paper className={classes.paper} elevation={6}>
             <Avatar className={classes.avatar}>
                 <LockOutlinedIcon />
             </Avatar>
-            <Typography variant="h5">{isSignup ? 'Sign Up' : 'Sign In'}</Typography>
+            <Typography component="h1" variant="h5">{isSignup ? 'Sign up' : 'Sign in'}</Typography>
             <form className={classes.form} onSubmit={handleSubmit}>
                 <Grid container spacing ={2}>
-                    {
-                        isSignup && (
+                    { isSignup && (
                             <>
                                 <Input name="firstname" label="First Name" handleChange={handleChange} autoFocus half />
                                 <Input name="lastname" label="Last Name" handleChange={handleChange} half />
@@ -106,7 +105,7 @@ const SignUp = () => {
                 <Grid container justifyContent = "flex-end">
                     <Grid item>
                         <Button onClick={switchMode}>
-                            {isSignup ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
+                            {isSignup ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
                         </Button>
                     </Grid>
                 </Grid>
@@ -116,4 +115,4 @@ const SignUp = () => {
   );
 };
 
-export default AUTH;
+export default SignUp;

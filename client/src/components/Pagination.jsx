@@ -9,12 +9,13 @@ import useStyles from './styles';
 
 const Paginate = ({page}) => {
     const {numberOfPages} = useSelector((state) => state.posts);
-    const classes = useStyles();
+
     const dispatch = useDispatch();
+    const classes = useStyles();
 
     useEffect(() => {
-        if (page) dispatch(getPosts(page));
-    }, [page]);
+        if (page) {dispatch(getPosts(page));}
+    }, [dispatch, page]);
 
     return (
         <Pagination 
@@ -27,7 +28,7 @@ const Paginate = ({page}) => {
             <PaginationItem { ...item} component={Link} to={`/posts?pages=${item.page}`} />
         )}
         />
-    )
-}
+    );
+};
 
 export default Paginate;
